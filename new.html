@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>身體健康狀況記錄</title>
+
+    <!-- <style>
+        body{
+            background-color: #B3BDCB;
+        }
+
+        .box{
+            width: 400px;
+            height: 320px;
+            background-color: #DAE3F0;
+            border-radius: 10px;
+            margin: 0px auto;
+        }
+
+        .type{
+            width: 400px;
+            height: 50px;
+            border-radius: 10px 10px 0px 0px;
+            margin: 0px auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .bp{
+            width: 100px;
+            height: 40px;
+            background-color: #DAE3F0;
+            border-radius: 15px 15px 0px 0px;
+            border: none;
+            margin: 0px -4px 0px 0px;
+            font-size: 21px;
+            box-shadow: inset 1px 3px 3px rgba(0,0,0,.5);
+        }
+        
+        .bg{
+            width: 100px;
+            height: 40px;
+            background-color: #DAE3F0;
+            border-radius: 15px 15px 0px 0px;
+            border: none;
+            margin: 0px -4px 0px 0px;
+            font-size: 21px;
+        }
+
+        /* .column{
+            display: flex; 
+            align-items: center;
+            margin: 0px 0px 8px 0px;
+        } */
+
+        input[type="date"],input[type="time"]{
+            background-color: white;
+            width: 150px;
+            height: 35px;
+            border: none;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 17px;
+            text-align: center;
+        }
+
+        .oval-button{
+            background-color: white;
+            width: 55px;
+            height: 35px;
+            border: none;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 17px;
+            box-shadow: 1px 1.5px 4px -1px black;
+        }
+
+        .selected{
+            background:#B3BDCB;
+        }
+
+        .saveBox{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .saveBtn{
+            background-color: white;
+            width: 80px;
+            height: 38px;
+            border: none;
+            border-radius: 12px;
+            margin: 40px;
+            font-size: 17px;
+            box-shadow: 1px 1.5px 4px -1px black;
+        }
+
+        .saveBtn:active{
+            background:#B3BDCB;
+        }
+
+        input[type="text"]{
+            background-color: white;
+            width: 150px;
+            height: 35px;
+            border: none;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 17px;
+            text-align: center;
+        }
+
+    </style> -->
+</head>
+
+<body>
+    <!-- <div class="type">
+        <div>
+            <button id="bg" class="bg" onclick="location.href='bg.html'">血糖</button>
+            <button id="bp" class="bp" onclick="location.href='bp.html'">血壓</button>
+        </div>
+    </div> -->
+    <div class="box">
+        <table>
+            <tr>
+                <td><p style="font-size:17px ;margin: 0px 50px 0px 10px;">日期</p></td>
+                <td><input type="date" id="date"></td>
+            </tr>
+            <tr>
+                <td><p style="font-size:17px ;margin: 0px 50px 0px 10px;">時間</p></td>
+                <td><input type="time" id="time"></td>
+            </tr>
+            <tr>
+                <td><p style="font-size:17px ;margin: 0px 50px 0px 10px;">收縮壓</p></td>
+                <td><input type="text" id="sbp" min="0" step="0.01"></td>
+                <td><p style="font-size:17px ;">mmHg</p></td>
+            </tr>
+            <tr>
+                <td><p style="font-size:17px ;margin: 0px 50px 0px 10px;">舒張壓</p></td>
+                <td><input type="text" id="dbp" min="0" step="0.01"></td>
+                <td><p style="font-size:17px ;">mmHg</p></td>
+            </tr>
+        </table>
+        <div class="saveBox">
+            <button id="save" class="saveBtn">完成</button>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="https://static.line-scdn.net/liff/egde/2.1/sdk.js"></script>
+
+<script>
+    function initializeLiff(myLiffId){
+        liff.init({liffId: myLiffId});
+    }
+function pushMsg(){
+    if(pDate == '' || pTime == '' || pSbp == '' || pDbp == '') { //資料檢查
+        alert('每個項目都必須輸入！');
+        return;
+    }
+
+    var msg = "###"; //回傳字串訊息
+    msg = msg + pDate + "/";
+    msg = msg + pTime + "/";
+    msg = msg + pSbp + "/";
+    msg = msg + pDbp + "/";
+    liff.sendMessages([ //推播訊息
+        {
+            type: 'text',
+            text: msg
+        }
+    ])
+    .then(() => {
+        liff.closeWindow(); //關閉視窗
+    });
+}
+
+$(document).ready(function(){
+    initializeLiff('{{liffid}}'); //接收傳遞的liffid參數
+    $('#save').click(function(e){
+        pushMsg($('#date')).val(), ($('#time')).val(), ($('#sbp')).val(), ($('#time')).dbp();
+    });
+});
+
+</script>
